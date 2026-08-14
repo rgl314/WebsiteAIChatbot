@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ChatBot
+
+  datasource:
+    url: jdbc:mysql://localhost:3307/chatbot
+    username: root
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
