@@ -53,17 +53,18 @@ public class KnowledgeService {
 
         try {
 
+            System.out.println("Starting ingestion: " + url);
+
             String text =
                     browserWebsiteLoader.loadRenderedText(url);
 
+            System.out.println(
+                    "Rendered text length: " + text.length()
+            );
+
             if (text == null || text.isBlank()) {
-                return new IngestionResponse(
-                        siteId,
-                        1,
-                        0,
-                        0,
-                        1,
-                        "FAILED"
+                throw new IllegalArgumentException(
+                        "No readable content found at: " + url
                 );
             }
 
@@ -75,18 +76,21 @@ public class KnowledgeService {
             List<Document> chunks =
                     textSplitter.apply(List.of(document));
 
+            System.out.println(
+                    "Chunks created: " + chunks.size()
+            );
+
             if (chunks.isEmpty()) {
-                return new IngestionResponse(
-                        siteId,
-                        1,
-                        0,
-                        0,
-                        1,
-                        "FAILED"
+                throw new IllegalArgumentException(
+                        "No chunks were created."
                 );
             }
 
             vectorStore.add(chunks);
+
+            System.out.println(
+                    "Successfully stored chunks in Qdrant."
+            );
 
             return new IngestionResponse(
                     siteId,
@@ -99,42 +103,13 @@ public class KnowledgeService {
 
         } catch (Exception e) {
 
-            return new IngestionResponse(
-                    siteId,
-                    1,
-                    0,
-                    0,
-                    1,
-                    "FAILED"
+            e.printStackTrace();
+
+            throw new RuntimeException(
+                    "Website ingestion failed for: " + url,
+                    e
             );
         }
     }
 
-    public String testWebsite(String url) {
-
-        String text =
-                browserWebsiteLoader.loadRenderedText(url);
-
-        System.out.println("Rendered text length: " + text.length());
-
-        System.out.println(
-                text.substring(
-                        0,
-                        Math.min(text.length(), 3000)
-                )
-        );
-
-        return text;
-    }
-
-    public String fetchHtml(String url) {
-
-        RestClient client = RestClient.create();
-
-        return client
-                .get()
-                .uri(url)
-                .retrieve()
-                .body(String.class);
-    }
 }
