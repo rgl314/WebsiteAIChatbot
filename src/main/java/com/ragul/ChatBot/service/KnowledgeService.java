@@ -1,6 +1,7 @@
 package com.ragul.ChatBot.service;
 
 import com.ragul.ChatBot.dto.IngestionResponse;
+import com.ragul.ChatBot.exception.IngestionException;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.jsoup.JsoupDocumentReader;
 import org.springframework.ai.reader.jsoup.config.JsoupDocumentReaderConfig;
@@ -30,21 +31,6 @@ public class KnowledgeService {
                 .withMinChunkSizeChars(350)
                 .withMinChunkLengthToEmbed(10)
                 .build();
-    }
-
-    public void addKnowledge(
-            String siteId,
-            String content) {
-
-        Document document = new Document(
-                content,
-                Map.of("siteId", siteId)
-        );
-
-        List<Document> chunks =
-                textSplitter.apply(List.of(document));
-
-        vectorStore.add(chunks);
     }
 
     public IngestionResponse ingestWebsite(
@@ -105,7 +91,7 @@ public class KnowledgeService {
 
             e.printStackTrace();
 
-            throw new RuntimeException(
+            throw new IngestionException(
                     "Website ingestion failed for: " + url,
                     e
             );

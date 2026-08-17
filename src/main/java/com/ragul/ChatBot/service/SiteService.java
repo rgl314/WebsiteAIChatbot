@@ -3,6 +3,7 @@ package com.ragul.ChatBot.service;
 import com.ragul.ChatBot.dto.SiteRequest;
 import com.ragul.ChatBot.dto.SiteResponse;
 import com.ragul.ChatBot.entity.Site;
+import com.ragul.ChatBot.exception.SiteNotFoundException;
 import com.ragul.ChatBot.repository.SiteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class SiteService {
 
     public Site getSite(String siteId){
         return siteRepository.findBySiteId(siteId)
-                .orElseThrow(() -> new IllegalArgumentException(
+                .orElseThrow(() -> new SiteNotFoundException(
                         "Site not found: " + siteId
                 ));
     }
@@ -55,8 +56,8 @@ public class SiteService {
 
         return siteRepository.findByPublicKey(publicKey)
                 .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "Invalid site key"
+                        new SiteNotFoundException(
+                                "Invalid site key = "+ publicKey +", Site not found!"
                         )
                 );
     }
