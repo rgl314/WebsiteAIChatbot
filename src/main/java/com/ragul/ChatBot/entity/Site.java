@@ -23,7 +23,7 @@ public class Site {
     @Column(name = "site_id", nullable = false, unique = true, length = 100)
     private String siteId;
 
-    @Column(name = "public_key", nullable = false, unique = true, length = 100)
+    @Column(name = "public_key", nullable = false, unique = true, length = 255)
     private String publicKey;
 
     @Column(nullable = false, length = 200)

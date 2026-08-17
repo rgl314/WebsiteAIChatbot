@@ -1,7 +1,6 @@
 package com.ragul.ChatBot.service;
 
 import com.ragul.ChatBot.entity.Site;
-import com.ragul.ChatBot.util.ConversationKeyUtil;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -58,11 +57,7 @@ public class ChatService {
 
         String filterExpression = "siteId == '" + siteId + "'";
 
-        String memoryConversationId =
-                ConversationKeyUtil.create(
-                        siteId,
-                        conversationId
-                );
+        String memoryConversationId = conversationId;
 
         System.out.println(
                 "Original conversationId: " + conversationId

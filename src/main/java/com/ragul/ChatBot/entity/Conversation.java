@@ -28,7 +28,7 @@ public class Conversation {
     @JoinColumn(name = "site_id", nullable = false)
     private Site site;
 
-    @Column(name = "conversation_id", nullable = false, length = 100)
+    @Column(name = "conversation_id", nullable = false, length = 36)
     private String conversationId;
 
 }
