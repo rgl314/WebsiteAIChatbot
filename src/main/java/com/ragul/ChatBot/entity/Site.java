@@ -20,8 +20,11 @@ public class Site {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(name = "site_id", nullable = false, unique = true, length = 100)
     private String siteId;
+
+    @Column(name = "public_key", nullable = false, unique = true, length = 100)
+    private String publicKey;
 
     @Column(nullable = false, length = 200)
     private String name;

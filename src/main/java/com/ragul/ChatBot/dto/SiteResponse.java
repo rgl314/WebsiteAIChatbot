@@ -10,6 +10,7 @@ import lombok.*;
 public class SiteResponse {
 
     private String siteId;
+    private String publicKey;
     private String name;
     private String domain;
 

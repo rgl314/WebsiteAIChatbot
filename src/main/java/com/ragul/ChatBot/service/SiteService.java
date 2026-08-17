@@ -16,8 +16,20 @@ public class SiteService {
     private final SiteRepository siteRepository;
 
     public SiteResponse createSite(SiteRequest request){
+        String siteId =
+                "site-" + UUID.randomUUID()
+                        .toString()
+                        .replace("-", "")
+                        .substring(0, 8);
+
+        String publicKey =
+                "pk_" + UUID.randomUUID()
+                        .toString()
+                        .replace("-", "");
+
         Site site = Site.builder()
-                .siteId("site-" + UUID.randomUUID().toString().substring(0, 8))
+                .siteId(siteId)
+                .publicKey(publicKey)
                 .name(request.getName())
                 .domain(request.getDomain())
                 .build();
@@ -26,6 +38,7 @@ public class SiteService {
 
         return SiteResponse.builder()
                 .siteId(saved.getSiteId())
+                .publicKey(saved.getPublicKey())
                 .name(saved.getName())
                 .domain(saved.getDomain())
                 .build();
@@ -36,6 +49,16 @@ public class SiteService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Site not found: " + siteId
                 ));
+    }
+
+    public Site getSiteByPublicKey(String publicKey) {
+
+        return siteRepository.findByPublicKey(publicKey)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Invalid site key"
+                        )
+                );
     }
 
 }
