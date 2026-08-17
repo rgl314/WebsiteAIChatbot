@@ -1,7 +1,9 @@
 package com.ragul.ChatBot.controller;
 
+import com.ragul.ChatBot.dto.IngestionResponse;
 import com.ragul.ChatBot.dto.WebsiteIngestionRequest;
 import com.ragul.ChatBot.service.KnowledgeService;
+import com.ragul.ChatBot.service.SiteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,28 +15,21 @@ import org.springframework.web.bind.annotation.*;
 public class WebsiteIngestionController {
 
     private final KnowledgeService knowledgeService;
+    private final SiteService siteService;
 
-    @PostMapping("/website")
-    public ResponseEntity<String> ingestWebsite(
-            @Valid @RequestBody WebsiteIngestionRequest request) {
+    @PostMapping("/{siteId}/ingest")
+    public ResponseEntity<IngestionResponse> ingest(
+            @PathVariable String siteId) {
 
-        knowledgeService.ingestWebsite(
-                request.getSiteId(),
-                request.getUrl()
-        );
+        var site = siteService.getSite(siteId);
 
-        return ResponseEntity.ok(
-                "Website ingested successfully"
-        );
-    }
+        IngestionResponse response =
+                knowledgeService.ingestWebsite(
+                        site.getSiteId(),
+                        site.getDomain()
+                );
 
-    @GetMapping("/test-render")
-    public ResponseEntity<String> testRender(
-            @RequestParam String url) {
-
-        return ResponseEntity.ok(
-                knowledgeService.testWebsite(url)
-        );
+        return ResponseEntity.ok(response);
     }
 
 }

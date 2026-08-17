@@ -1,5 +1,6 @@
 package com.ragul.ChatBot.service;
 
+import com.ragul.ChatBot.dto.IngestionResponse;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.jsoup.JsoupDocumentReader;
 import org.springframework.ai.reader.jsoup.config.JsoupDocumentReaderConfig;
@@ -46,7 +47,7 @@ public class KnowledgeService {
         vectorStore.add(chunks);
     }
 
-    public void ingestWebsite(
+    public IngestionResponse ingestWebsite(
             String siteId,
             String url) {
 
@@ -56,60 +57,55 @@ public class KnowledgeService {
                     browserWebsiteLoader.loadRenderedText(url);
 
             if (text == null || text.isBlank()) {
-                throw new IllegalArgumentException(
-                        "No readable content found at: " + url
+                return new IngestionResponse(
+                        siteId,
+                        1,
+                        0,
+                        0,
+                        1,
+                        "FAILED"
                 );
             }
-
-            System.out.println(
-                    "Rendered text length: " + text.length()
-            );
 
             Document document = new Document(
                     text,
-                    Map.of(
-                            "siteId", siteId,
-                            "sourceUrl", url
-                    )
+                    Map.of("siteId", siteId)
             );
 
             List<Document> chunks =
-                    textSplitter.apply(
-                            List.of(document)
-                    );
+                    textSplitter.apply(List.of(document));
 
             if (chunks.isEmpty()) {
-                throw new IllegalArgumentException(
-                        "No chunks were created for: " + url
-                );
-            }
-
-            System.out.println(
-                    "Chunks created: " + chunks.size()
-            );
-
-            for (int i = 0; i < chunks.size(); i++) {
-
-                Document chunk = chunks.get(i);
-
-                System.out.println(
-                        "\n========== CHUNK " + (i + 1) + " =========="
-                );
-
-                System.out.println(chunk.getText());
-
-                System.out.println(
-                        "METADATA: " + chunk.getMetadata()
+                return new IngestionResponse(
+                        siteId,
+                        1,
+                        0,
+                        0,
+                        1,
+                        "FAILED"
                 );
             }
 
             vectorStore.add(chunks);
 
+            return new IngestionResponse(
+                    siteId,
+                    1,
+                    1,
+                    chunks.size(),
+                    0,
+                    "COMPLETED"
+            );
+
         } catch (Exception e) {
 
-            throw new RuntimeException(
-                    "Failed to ingest website: " + url,
-                    e
+            return new IngestionResponse(
+                    siteId,
+                    1,
+                    0,
+                    0,
+                    1,
+                    "FAILED"
             );
         }
     }
