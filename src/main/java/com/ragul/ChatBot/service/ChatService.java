@@ -13,9 +13,11 @@ public class ChatService {
 
     private final ChatClient chatClient;
     private final SiteService siteService;
+    private final ConversationService conversationService;
 
-    public ChatService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory, SiteService siteService, VectorStore vectorStore) {
+    public ChatService(ChatClient.Builder chatClientBuilder, ChatMemory chatMemory, SiteService siteService, VectorStore vectorStore, ConversationService conversationService) {
         this.siteService = siteService;
+        this.conversationService = conversationService;
         this.chatClient = chatClientBuilder
                 .defaultSystem("""
                 You are a helpful website assistant.
@@ -48,7 +50,14 @@ public class ChatService {
 
         Site site = siteService.getSite(siteId);
 
+        conversationService.getOrCreate(
+                siteId,
+                conversationId
+        );
+
         String filterExpression = "siteId == '" + siteId + "'";
+
+        String memoryConversationId = siteId + ":" + conversationId;
 
         return chatClient.prompt()
                 .system("""
@@ -65,7 +74,7 @@ public class ChatService {
                 .advisors(advisor -> advisor
                                 .param(
                                         ChatMemory.CONVERSATION_ID,
-                                        conversationId
+                                        memoryConversationId
                                 ).param(
                                         QuestionAnswerAdvisor.FILTER_EXPRESSION,
                                         filterExpression
