@@ -70,6 +70,12 @@
 			<artifactId>spring-ai-jsoup-document-reader</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.microsoft.playwright</groupId>
+			<artifactId>playwright</artifactId>
+			<version>1.61.0</version>
+		</dependency>
+
 		<!-- Gemini Embeddings -->
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
