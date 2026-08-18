@@ -351,9 +351,7 @@ POST /api/sites
 ```json
 {
   "name": "Ragul Portfolio",
-  "domain": "https://raguls4.vercel.app/",
-  "widgetName": "Ragul's Assistant",
-  "greeting": "Hi! Ask me about my projects, skills, or experience."
+  "domain": "https://raguls4.vercel.app/"
 }
 ```
 
@@ -430,7 +428,6 @@ Response:
 | Method | Endpoint                         | Description                                 |
 | ------ | -------------------------------- | ------------------------------------------- |
 | POST   | `/api/chat`                      | Chat with the website-specific AI assistant |
-| GET    | `/api/widget/config/{publicKey}` | Get widget configuration                    |
 | GET    | `/widget.js`                     | Serve embeddable chatbot widget             |
 
 ---
@@ -538,17 +535,13 @@ src
 │   │
 │   └── resources
 │       ├── application.yml
-│       ├── application-dev.yml
-│       ├── application-prod.yml
 │       ├── static
 │       │   └── widget.js
 │       └── db
 │           └── migration
 │               ├── V1__create_application_tables.sql
-│               ├── V2__add_widget_configuration.sql
-│               └── V3__create_admin_users.sql
+│               └── V2__create_admin_users.sql
 │
-├── widget
 │
 ├── Dockerfile
 ├── docker-compose.yml
@@ -573,8 +566,6 @@ site_id
 public_key
 name
 domain
-widget_name
-greeting
 ```
 
 ---
