@@ -8,10 +8,7 @@ import com.ragul.ChatBot.service.SiteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/chat")
@@ -22,9 +19,10 @@ public class ChatController {
     private final SiteService siteService;
 
     @PostMapping
-    public ResponseEntity<ChatResponse> chat(@Valid @RequestBody ChatRequest request){
+    public ResponseEntity<ChatResponse> chat(@RequestHeader("X-Chatbot-Public-Key")
+                                                 String publicKey, @Valid @RequestBody ChatRequest request){
         Site site = siteService.getSiteByPublicKey(
-                        request.getPublicKey()
+                        publicKey
                 );
 
         String response = chatService.chat(

@@ -13,9 +13,6 @@ import lombok.Setter;
 public class ChatRequest {
 
     @NotBlank
-    private String publicKey;
-
-    @NotBlank
     private String conversationId;
 
     @NotBlank

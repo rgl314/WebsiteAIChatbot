@@ -19,6 +19,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "POST",
                         "OPTIONS"
                 )
-                .allowedHeaders("*");
+                .allowedHeaders(
+                        "Content-Type",
+                        "X-Chatbot-Public-Key"
+                );
     }
 }
