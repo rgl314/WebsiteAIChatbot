@@ -21,8 +21,7 @@ public class SecurityFilterConfig {
         );
 
         registration.addUrlPatterns(
-                "/api/chat",
-                "/api/widget/config/*"
+                "/api/chat"
         );
 
         registration.setOrder(

@@ -43,3 +43,12 @@ spring:
         repository:
           jdbc:
             initialize-schema: always
+
+app:
+  admin:
+    username: ${ADMIN_USERNAME}
+    password: ${ADMIN_PASSWORD}
+
+logging:
+  level:
+    org.springframework.security: DEBUG

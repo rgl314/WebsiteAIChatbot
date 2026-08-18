@@ -23,12 +23,15 @@ public class BrowserWebsiteLoader {
 
             Page page = browser.newPage();
 
+            page.setDefaultTimeout(15_000);
+
             page.navigate(
                     url,
                     new Page.NavigateOptions()
                             .setWaitUntil(
-                                    WaitUntilState.NETWORKIDLE
+                                    WaitUntilState.DOMCONTENTLOADED
                             )
+                            .setTimeout(15_000)
             );
 
             page.waitForTimeout(2000);

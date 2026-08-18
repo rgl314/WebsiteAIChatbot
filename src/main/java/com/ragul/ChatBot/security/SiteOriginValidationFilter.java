@@ -74,6 +74,34 @@ public class SiteOriginValidationFilter extends OncePerRequestFilter {
             return;
         }
 
+        System.out.println(
+                "========== ORIGIN VALIDATION =========="
+        );
+
+        System.out.println(
+                "Request Origin: " + origin
+        );
+
+        System.out.println(
+                "Public Key: " + publicKey
+        );
+
+        System.out.println(
+                "Site ID: " + site.getSiteId()
+        );
+
+        System.out.println(
+                "Registered Domain: " + site.getDomain()
+        );
+
+        System.out.println(
+                "Origin Allowed: " +
+                        isOriginAllowed(
+                                origin,
+                                site.getDomain()
+                        )
+        );
+
         if(!isOriginAllowed(origin, site.getDomain())){
             reject(
                     response,
